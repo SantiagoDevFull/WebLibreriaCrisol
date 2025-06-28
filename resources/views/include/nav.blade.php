@@ -31,10 +31,10 @@
 </style>
 <header>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top mask-custom shadow-0">
+    <nav class="navbar navbar-expand-lg navbar-light mask-custom shadow-0 bg-warning">
         <div class="container">
             <a class="navbar-brand" href="#!"><span style="color: #5e9693;">Librería</span><span
-                    style="color: #fff;">Crisol</span></a>
+                    style="color: #190bda;">Crisol</span></a>
             <button class="navbar-toggler" type="button" data-mdb-collapse-init data-mdb-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>

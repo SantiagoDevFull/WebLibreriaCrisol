@@ -24,11 +24,19 @@ Route::get('/catalog', function (\Illuminate\Http\Request $request) {
     $maxResults = 20;
     $startIndex = ($page - 1) * $maxResults;
 
+    $query = $request->input('q', 'a');
+    $category = $request->input('category');
+
+    $searchQuery = $query;
+    if ($category) {
+        $searchQuery .= "+subject:" . $category;
+    }
+
     $response = Http::get('https://www.googleapis.com/books/v1/volumes', [
-        'q' => 'a',
+        'q' => $searchQuery,
         'startIndex' => $startIndex,
         'maxResults' => $maxResults,
-        'key' => 'AIzaSyDLeq15SgnSznzB-DQ1HwF3sttqQldQI40', // coloca tu clave aquí
+        'key' => 'AIzaSyDLeq15SgnSznzB-DQ1HwF3sttqQldQI40',
     ]);
 
     return $response->json();

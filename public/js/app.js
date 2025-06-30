@@ -5086,6 +5086,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -5117,12 +5119,34 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       books: [],
-      page: 1
+      page: 1,
+      search: '',
+      category: ''
     };
   },
   watch: {
@@ -5130,24 +5154,38 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   },
   mounted: function mounted() {
     this.fetchBooks();
+    this.debouncedFetch = lodash__WEBPACK_IMPORTED_MODULE_0___default().debounce(this.fetchBooks, 500);
   },
   methods: {
     fetchBooks: function fetchBooks() {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var res;
+        var res, _t;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.n) {
             case 0:
+              _context.p = 0;
               _context.n = 1;
-              return axios.get("/api/catalog?page=".concat(_this.page));
+              return axios.get("/api/catalog", {
+                params: {
+                  page: _this.page,
+                  q: _this.search || 'a',
+                  category: _this.category
+                }
+              });
             case 1:
               res = _context.v;
               _this.books = res.data.items || [];
+              _context.n = 3;
+              break;
             case 2:
+              _context.p = 2;
+              _t = _context.v;
+              console.error("Error al obtener libros:", _t);
+            case 3:
               return _context.a(2);
           }
-        }, _callee);
+        }, _callee, null, [[0, 2]]);
       }))();
     }
   }
@@ -5192,8 +5230,83 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'BookIntro',
   mounted: function mounted() {}
 });
 
@@ -27512,6 +27625,87 @@ var render = function () {
   return _c("div", { staticClass: "container mt-4" }, [
     _c("h3", { staticClass: "mb-4" }, [_vm._v("📚 Catálogo de Libros")]),
     _vm._v(" "),
+    _c("div", { staticClass: "row mb-3" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.search,
+              expression: "search",
+            },
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text", placeholder: "Buscar libro o autor..." },
+          domProps: { value: _vm.search },
+          on: {
+            input: [
+              function ($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.search = $event.target.value
+              },
+              _vm.debouncedFetch,
+            ],
+          },
+        }),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-4" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.category,
+                expression: "category",
+              },
+            ],
+            staticClass: "form-select",
+            on: {
+              change: [
+                function ($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function (o) {
+                      return o.selected
+                    })
+                    .map(function (o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.category = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                },
+                _vm.fetchBooks,
+              ],
+            },
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [
+              _vm._v("Todas las categorías"),
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "fiction" } }, [_vm._v("Ficción")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "history" } }, [_vm._v("Historia")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "science" } }, [_vm._v("Ciencia")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "art" } }, [_vm._v("Arte")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "biography" } }, [
+              _vm._v("Biografía"),
+            ]),
+          ]
+        ),
+      ]),
+    ]),
+    _vm._v(" "),
     _c(
       "div",
       { staticClass: "row" },
@@ -27535,13 +27729,13 @@ var render = function () {
               _vm._v(" "),
               _c("p", { staticClass: "card-text" }, [
                 _vm._v(
-                  "\n  " +
+                  "\n                        " +
                     _vm._s(
                       book.volumeInfo.authors
                         ? book.volumeInfo.authors.join(", ")
                         : "Autor desconocido"
                     ) +
-                    "\n"
+                    "\n                    "
                 ),
               ]),
             ]),
@@ -27611,83 +27805,279 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "bg-image vh-100",
-        staticStyle: {
-          "background-image":
-            "url('https://cencomalls.pe/sites/default/files/styles/rm_tiendas_fotos_y_mapas/public/fotos-tienda/CRISOL1-NIVEL%2520-MENOS1-CENCOLAMOLINA.jpg.webp?itok=sh6c7k8e')",
-          "background-size": "cover",
-          "background-repeat": "no-repeat",
-          "background-position": "center",
-        },
-        attrs: { id: "intro" },
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass:
-              "mask d-flex justify-content-center align-items-center",
-            staticStyle: {
-              "background-color": "rgba(250, 182, 162, 0.15)",
-              height: "100%",
-              width: "100%",
-            },
+    return _c("div", [
+      _c(
+        "div",
+        {
+          staticClass: "bg-image vh-100",
+          staticStyle: {
+            "background-image":
+              "url('https://cencomalls.pe/sites/default/files/styles/rm_tiendas_fotos_y_mapas/public/fotos-tienda/CRISOL1-NIVEL%2520-MENOS1-CENCOLAMOLINA.jpg.webp?itok=sh6c7k8e')",
+            "background-size": "cover",
+            "background-repeat": "no-repeat",
+            "background-position": "center",
           },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "w-100 px-3",
-                staticStyle: {
-                  position: "absolute",
-                  top: "60%",
-                  transform: "translateY(-50%)",
-                },
+          attrs: { id: "intro" },
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "mask d-flex justify-content-center align-items-center",
+              staticStyle: {
+                "background-color": "rgba(250, 182, 162, 0.15)",
+                height: "100%",
+                width: "100%",
               },
-              [
-                _c(
-                  "div",
-                  { staticClass: "bg-white bg-opacity-50 text-center py-4" },
-                  [
-                    _c("h2", { staticClass: "mb-4 badge bg-dark fs-4" }, [
-                      _vm._v("Descubre tu próximo libro"),
-                    ]),
-                    _vm._v(" "),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "mb-4 badge bg-danger fs-4" }, [
-                      _vm._v(
-                        "Más de 50,000 títulos disponibles. Envíos a todo el Perú en\n                    24-48\n                    horas. Tu mundo de lectura te espera."
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "w-100 px-3",
+                  staticStyle: {
+                    position: "absolute",
+                    top: "60%",
+                    transform: "translateY(-50%)",
+                  },
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "bg-white bg-opacity-50 text-center py-4" },
+                    [
+                      _c("h2", { staticClass: "mb-4 badge bg-dark fs-4" }, [
+                        _vm._v("Descubre tu próximo libro"),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "mb-4 badge bg-danger fs-4" }, [
+                        _vm._v(
+                          "Más de 50,000 títulos disponibles. Envíos a todo el Perú en\n                        24-48\n                        horas. Tu mundo de lectura te espera."
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary me-2",
+                          attrs: { href: "/catalogo" },
+                        },
+                        [_vm._v("Explorar Catálogo")]
                       ),
-                    ]),
-                    _vm._v(" "),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "btn btn-primary me-2",
-                        attrs: { href: "#" },
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-success",
+                          attrs: { href: "#" },
+                        },
+                        [_vm._v("Ofertas Especiales")]
+                      ),
+                    ]
+                  ),
+                ]
+              ),
+            ]
+          ),
+        ]
+      ),
+      _vm._v(" "),
+      _c("section", { staticClass: "py-5 bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("h3", { staticClass: "text-center mb-5 fw-bold" }, [
+            _vm._v("Testimonios de nuestros lectores"),
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "carousel slide",
+              attrs: { id: "customCarousel", "data-bs-ride": "carousel" },
+            },
+            [
+              _c("div", { staticClass: "carousel-inner" }, [
+                _c("div", { staticClass: "carousel-item active" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card mx-auto shadow-lg p-4",
+                      staticStyle: {
+                        "max-width": "600px",
+                        "border-radius": "1rem",
                       },
-                      [_vm._v("Explorar Catálogo")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "btn btn-success", attrs: { href: "#" } },
-                      [_vm._v("Ofertas Especiales")]
-                    ),
-                  ]
-                ),
-              ]
-            ),
-          ]
-        ),
-      ]
-    )
+                    },
+                    [
+                      _c("div", { staticClass: "d-flex align-items-center" }, [
+                        _c("img", {
+                          staticClass: "rounded-circle me-3",
+                          attrs: {
+                            src: "https://randomuser.me/api/portraits/women/44.jpg",
+                            width: "70",
+                            height: "70",
+                            alt: "Ana",
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c("h5", { staticClass: "mb-0" }, [
+                            _vm._v("Ana Pérez"),
+                          ]),
+                          _vm._v(" "),
+                          _c("small", { staticClass: "text-muted" }, [
+                            _vm._v("Lectora frecuente"),
+                          ]),
+                        ]),
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "mt-4 fst-italic" }, [
+                        _vm._v(
+                          "“Crisol tiene todo lo que necesito: buenos precios, entregas\n                                rápidas y una variedad impresionante de libros.”"
+                        ),
+                      ]),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "carousel-item" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card mx-auto shadow-lg p-4",
+                      staticStyle: {
+                        "max-width": "600px",
+                        "border-radius": "1rem",
+                      },
+                    },
+                    [
+                      _c("div", { staticClass: "d-flex align-items-center" }, [
+                        _c("img", {
+                          staticClass: "rounded-circle me-3",
+                          attrs: {
+                            src: "https://randomuser.me/api/portraits/men/32.jpg",
+                            width: "70",
+                            height: "70",
+                            alt: "Carlos",
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c("h5", { staticClass: "mb-0" }, [
+                            _vm._v("Carlos Ramírez"),
+                          ]),
+                          _vm._v(" "),
+                          _c("small", { staticClass: "text-muted" }, [
+                            _vm._v("Docente universitario"),
+                          ]),
+                        ]),
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "mt-4 fst-italic" }, [
+                        _vm._v(
+                          "“Excelente atención y catálogo. Siempre encuentro libros\n                                nuevos e interesantes para mis clases.”"
+                        ),
+                      ]),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "carousel-item" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card mx-auto shadow-lg p-4",
+                      staticStyle: {
+                        "max-width": "600px",
+                        "border-radius": "1rem",
+                      },
+                    },
+                    [
+                      _c("div", { staticClass: "d-flex align-items-center" }, [
+                        _c("img", {
+                          staticClass: "rounded-circle me-3",
+                          attrs: {
+                            src: "https://randomuser.me/api/portraits/women/65.jpg",
+                            width: "70",
+                            height: "70",
+                            alt: "Lucía",
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c("div", [
+                          _c("h5", { staticClass: "mb-0" }, [
+                            _vm._v("Lucía Fernández"),
+                          ]),
+                          _vm._v(" "),
+                          _c("small", { staticClass: "text-muted" }, [
+                            _vm._v("Madre y lectora"),
+                          ]),
+                        ]),
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "mt-4 fst-italic" }, [
+                        _vm._v(
+                          "“Disfruto mucho comprar libros para mis hijos. Crisol es\n                                confiable y rápido en los envíos.”"
+                        ),
+                      ]),
+                    ]
+                  ),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "carousel-control-prev",
+                  attrs: {
+                    type: "button",
+                    "data-bs-target": "#customCarousel",
+                    "data-bs-slide": "prev",
+                  },
+                },
+                [
+                  _c("span", {
+                    staticClass:
+                      "carousel-control-prev-icon bg-dark rounded-circle p-2",
+                    attrs: { "aria-hidden": "true" },
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "visually-hidden" }, [
+                    _vm._v("Anterior"),
+                  ]),
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "carousel-control-next",
+                  attrs: {
+                    type: "button",
+                    "data-bs-target": "#customCarousel",
+                    "data-bs-slide": "next",
+                  },
+                },
+                [
+                  _c("span", {
+                    staticClass:
+                      "carousel-control-next-icon bg-dark rounded-circle p-2",
+                    attrs: { "aria-hidden": "true" },
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "visually-hidden" }, [
+                    _vm._v("Siguiente"),
+                  ]),
+                ]
+              ),
+            ]
+          ),
+        ]),
+      ]),
+    ])
   },
 ]
 render._withStripped = true

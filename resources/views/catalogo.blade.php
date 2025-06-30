@@ -3,6 +3,8 @@
 
 @section('information')
 
-    <welcome></welcome>
+    <div id="app">
+        <book-catalog></book-catalog>
+    </div>
 
 @endsection
